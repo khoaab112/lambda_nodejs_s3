@@ -1,0 +1,16 @@
+{
+    "name": "register_kintone",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "type": "module",
+    "license": "ISC",
+    "dependencies": {
+        "@kintone/rest-api-client": "^3.3.14",
+        "axios": "^1.6.8"
+    }
+}

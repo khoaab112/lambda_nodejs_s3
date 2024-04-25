@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チャットボットマニュアル用</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- 日本語化する場合は下記を追記 -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
+    <!-- <script src="event.js"></script> -->
+</head>
+
+<body>
+    <div id="spinner" class="none-spinner">
+        <div class="spinner-grow" role="status">
+        </div>
+    </div>
+    <div class="container-fluid mt-5 " id="home">
+        <div id="userIdProfileField"></div>
+        <form>
+            <!-- 商品名 -->
+            <div class="form-group">
+                <div>
+                    <div class="flex-product-name">
+                        <label for="productName" style="margin-right: 0.5rem;">現場名</label>
+                        <input type="text" class="form-control mt-2" name="productName" id="productName" autocomplete="off">
+                        <button type="button" class="btn btn-primary" id="btn-lookup_1">select</button>
+                        <button class="btn btn-secondary" type="button" onclick="clearLookup_1()">remove</button>
+                    </div>
+                </div>
+                <div class="flex-product-name mt-2">
+                    <label for="address">住所</label><input class="mt-2 ms-2" type="text" name="address" id="address" disabled style="padding: 0.2rem;" autocomplete="off">
+                </div>
+            </div>
+            <div class="form-group mt-3 flex-product-name">
+                <label for="file" class="me-2">画像</label>
+                <input type="file" name="file" id="file" autocomplete="off">
+                <input type="text" id="key-file" hidden>
+            </div>
+            <hr>
+            <!-- table -->
+            <h3><strong>WOFFテスト用テーブル</strong></h3>
+            <div class="form-group" id="table">
+                <div class="row mt-2 indextb_1">
+                    <div class="reduce"><strong>1</strong><button id="indextb_1" class="btn-reduce" type="button" onclick="reduceTB(this)">X</button></div>
+                    <div class="col-8">
+                        <label for="tb-lookup">商品名</label>
+                        <input class="mt-2" type="text" name="tb-lookup" id="tb-lookup-1" autocomplete="off">
+                        <div class="mt-2 mb-4">
+                            <button type="button" class="btn btn-primary" onclick="showModal2('indextb_1')">select</button>
+                            <button type="button" class="btn btn-secondary" onclick="clearLookup_2('indextb_1')">remove</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <label for="tb-lookup-copy">商品コード</label>
+                        <input class="mt-2" type="text" name="tb-lookup-copy" id="tb-lookup-copy-1" disabled autocomplete="off">
+                    </div>
+                    <div class="col-6">
+                        <label for="ticket-type" class="mb-2">在庫区分</label>
+                        <div style="display: flex; align-items: center; font-weight: 100;">
+                            <input type="checkbox" name="ticket-type" id="ticket-type-1" value="あり" autocomplete="off">
+                            <label for="ticket-type-1">あり</label>
+                            <input type="checkbox" name="ticket-type" id="ticket-type-1" value="なし" autocomplete="off">
+                            <label for="ticket-type-2">なし</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label for="number">数量</label>
+                        <input class="mt-2" type="number" name="number" id="number-1" autocomplete="off">
+                    </div>
+                    <div class="col-6">
+                        <label for="price" class="mt-2">単価</label>
+                        <input class="mt-2" type="number" name="price" id="price-1" autocomplete="off">
+                    </div>
+                    <div class="col-6">
+                        <label for="total" class="mt-2">合計</label>
+                        <input class="mt-2" type="number" name="total" id="total-1" disabled autocomplete="off">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group sum">
+                <button class="add-sub-table" id="btn-add-subtable" type="button">+</button>
+                <div style="    display: flex;
+                justify-content: flex-end;
+                align-items: center;">
+                    <label for="tb-sum">総合計</label>
+                    <input type="number" name="tb-sum" id="tb-sum" disabled autocomplete="off">
+                </div>
+            </div>
+        </form>
+        <div class="mt-3">
+            <button class="btn btn-primary" id="submit">登録</button>
+        </div>
+    </div>
+
+    <!-- Modal 1 -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">現場管理</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- <div class="spinner-grow" role="status">
+                    </div> -->
+                    <table id="tb_1">
+                        <tr>
+                            <th>現場名</th>
+                            <th>現場住所</th>
+                            <th>Action</th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end modal -->
+    <!-- modal 2 -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop_2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div id="data-cache" class=""></div>
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">商品マスタ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- <div class="spinner-grow" role="status">
+                    </div> -->
+                    <table id="tb_2">
+                        <tr>
+                            <th>商品名</th>
+                            <th>action</th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Understood</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- end modal 2 -->
+</body>
+<!-- WOFF -->
+<script src="https://static.worksmobile.net/static/wm/woff/edge/3.6/sdk.js">
+</script>
+<!-- axios -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="module" src="script.js"></script>
+<!-- aws s3 -->
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.932.0.min.js"></script>
+
+<script>
+    $("#btn-add-subtable").on("click", function() {
+        var rowCount = $("#table .row.mt-2").length;
+        var index = Number(rowCount) + 1;
+        const htmlSubTable = `<div class="row mt-2 indextb_${index}">
+            <div class="reduce"><strong>${index}</strong><button id="indextb_${index}" class="btn-reduce" type="button" onclick="reduceTB(this)">X</button></div>
+                    <div class="col-8">
+                        <label for="tb-lookup">商品名</label>
+                        <input class="mt-2" type="text" name="tb-lookup" id="tb-lookup-${index}" autocomplete="off">
+                        <div class="mt-2 mb-4">
+                            <button type="button" class="btn btn-primary" onclick="showModal2('indextb_${index}')">select</button>
+                            <button type="button" class="btn btn-secondary" onclick="clearLookup_2('indextb_${index}')">remove</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <label for="tb-lookup-copy">商品コード</label>
+                        <input class="mt-2" type="text" name="tb-lookup-copy" id="tb-lookup-copy-${index}" disabled autocomplete="off">
+                    </div>
+                    <div class="col-6">
+                        <label for="ticket-type" class="mb-2">在庫区分</label>
+                        <div style="display: flex; align-items: center; font-weight: 100;">
+                            <input type="checkbox" name="ticket-type" id="ticket-type-${index}" value="あり" autocomplete="off">
+                            <label for="ticket-type-1">あり</label>
+                            <input type="checkbox" name="ticket-type" id="ticket-type-${index}" value="なし" autocomplete="off">
+                            <label for="ticket-type-2">なし</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label for="number">数量</label>
+                        <input class="mt-2" type="number" name="number" id="number-${index}" autocomplete="off">
+                    </div>
+                    <div class="col-6">
+                        <label for="price" class="mt-2">単価</label>
+                        <input class="mt-2" type="number" name="price" id="price-${index}" autocomplete="off">
+                    </div>
+                    <div class="col-6">
+                        <label for="total" class="mt-2">合計</label>
+                        <input class="mt-2" type="number" name="total" id="total-${index}" disabled autocomplete="off">
+                    </div>
+                </div>`;
+        $("#table").append(htmlSubTable);
+        flowEvent(`indextb_${index}`);
+        sum();
+    });
+
+    function reduceTB(button) {
+        const id = button.id;
+        $("." + id).remove();
+        var rows = document.querySelectorAll('#table .row.mt-2');
+        let index = 1;
+        rows.forEach(function(row) {
+            var span = row.querySelector('strong');
+            span.textContent = index;
+            row.className = `row mt-2 indextb_${index}`;
+            var button = document.querySelector('button.btn-reduce');
+            button.id = "indextb_" + index;
+            $("button.btn.btn-primary").attr("onclick", `showModal2('indextb_${index++}')`);
+        });
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        flowEvent('indextb_1');
+        sum();
+    });
+    const flowEvent = (id) => {
+        var row = document.querySelector('.row.mt-2.' + id);
+        var numberInput = row.querySelector('input[name="number"]');
+        var priceInput = row.querySelector('input[name="price"]');
+        var totalInput = row.querySelector('input[name="total"]');
+        numberInput.addEventListener('input', updateTotal);
+        priceInput.addEventListener('input', updateTotal);
+
+        function updateTotal() {
+            var number = parseFloat(numberInput.value) || 0;
+            var price = parseFloat(priceInput.value) || 0;
+            var total = number * price;
+            totalInput.value = total;
+        }
+    };
+    const sum = () => {
+        var totalInputs = document.querySelectorAll('input[name="total"]');
+        var numberInput = document.querySelectorAll('input[name="number"]');
+        var priceInput = document.querySelectorAll('input[name="price"]');
+        var sumInput = document.getElementById('tb-sum');
+        numberInput.forEach(function(input) {
+            input.addEventListener('input', updateSum);
+        });
+        priceInput.forEach(function(input) {
+            input.addEventListener('input', updateSum);
+        });
+
+        function updateSum() {
+            var sum = 0;
+            totalInputs.forEach(function(input) {
+                sum += parseFloat(input.value) || 0;
+            });
+            sumInput.value = sum
+        }
+    };
+    $("#btn-lookup_1").click(function() {
+        $("#exampleModal").modal('show');
+    });
+    const showModal2 = (className) => {
+
+        $("#staticBackdrop_2").modal('show');
+        $("#data-cache").removeClass();
+        $("#data-cache").addClass(className.split('_')[1]);
+    };
+
+    function selective(name, address) {
+        $("#productName").val(name);
+        $("#address").val(address);
+        $("#exampleModal").modal('hide');
+
+    };
+
+    function clearLookup_1() {
+        $("#productName").val("");
+        $("#address").val("");
+    }
+
+    function selective_2(name, code) {
+        let className = $('#data-cache').attr('class');
+        $("#tb-lookup-" + className).val(name);
+        $("#tb-lookup-copy-" + className).val(code);
+        $("#staticBackdrop_2").modal('hide');
+    };
+
+    function clearLookup_2(className) {
+        let index = className.split('_')[1]
+        $("#tb-lookup-" + index).val("");
+        $("#tb-lookup-copy-" + index).val("");
+    }
+</script>
+
+</html>
